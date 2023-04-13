@@ -1,0 +1,18 @@
+server:
+  port: 3060
+
+spring:
+  application:
+    name: jpk-ai
+  profiles:
+    active: dev
+  #  main:
+  #    allow-circular-references: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+# stable-ai 相关配置
+stable_ai:
+  STABILITY_API_KEY: sk-3bV92mwTVX3PLTQDUzaxUVN0qRXvgHrksZ9EP0QlX9qz35lb
+  URL: https://api.stability.ai
