@@ -1,35 +1,38 @@
 package com.jpk.jpkai.common.exception;
 
-
 import com.jpk.jpkai.common.api.IErrorCode;
+import lombok.AllArgsConstructor;
 
-/**
- * 自定义API异常
- * Created by macro on 2020/2/27.
- */
+@AllArgsConstructor
 public class ApiException extends RuntimeException {
-    private IErrorCode errorCode;
-
-    public ApiException(IErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
-    }
-
-    public ApiException(IErrorCode errorCode, String message) {
-        super(message);
-        this.errorCode = errorCode;
-    }
+    private final IErrorCode errorCode;
 
     public ApiException(String message) {
         super(message);
+        this.errorCode = null;
     }
 
     public ApiException(Throwable cause) {
         super(cause);
+        this.errorCode = null;
     }
 
     public ApiException(String message, Throwable cause) {
         super(message, cause);
+        this.errorCode = null;
+    }
+
+    public ApiException(IErrorCode errorCode, String message) {
+        this(errorCode, message, null);
+    }
+
+    public ApiException(IErrorCode errorCode, String message, Throwable cause) {
+        super(message, cause);
+        this.errorCode = errorCode;
+    }
+
+    public static ApiException from(Throwable cause) {
+        return new ApiException(cause.getMessage(), cause);
     }
 
     public IErrorCode getErrorCode() {

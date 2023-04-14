@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -29,24 +32,20 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<CommonResult<JSONObject>> handleValidException(MethodArgumentNotValidException e) {
-        return getCommonResultResponseEntity(e);
+        return getCommonResultResponseEntity(e.getBindingResult());
     }
 
     @ResponseBody
     @ExceptionHandler(value = BindException.class)
     public ResponseEntity<CommonResult<JSONObject>> handleValidException(BindException e) {
-        return getCommonResultResponseEntity(e);
+        return getCommonResultResponseEntity(e.getBindingResult());
     }
 
-    private ResponseEntity<CommonResult<JSONObject>> getCommonResultResponseEntity(BindException e) {
-        BindingResult bindingResult = e.getBindingResult();
-        String message = null;
-        if (bindingResult.hasErrors()) {
-            FieldError fieldError = bindingResult.getFieldError();
-            if (fieldError != null) {
-                message = fieldError.getField() + fieldError.getDefaultMessage();
-            }
-        }
+    private ResponseEntity<CommonResult<JSONObject>> getCommonResultResponseEntity(BindingResult bindingResult) {
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        String message = fieldErrors.stream()
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.joining(","));
         return CommonResult.validateFailed(message);
     }
 }
