@@ -9,4 +9,6 @@ public interface StableGenerationService {
      * 文本转图片
      */
     String postTextToImage(Map<String, Object> stableGenerationDto);
+
+    String postImageToImage(Map<String, Object> params);
 }

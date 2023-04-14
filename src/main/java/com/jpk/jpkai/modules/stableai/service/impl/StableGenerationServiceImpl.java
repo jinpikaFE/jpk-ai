@@ -27,7 +27,22 @@ public class StableGenerationServiceImpl implements StableGenerationService {
                 .header(Header.AUTHORIZATION, "Bearer " + STABILITY_API_KEY)
                 .header(Header.CONTENT_TYPE, "application/json")
                 .header(Header.ACCEPT, "application/json")
+                // 传json
                 .body(dataJson)
+                .execute()
+                .body();
+        return res;
+    }
+
+    @Override
+    public String postImageToImage(Map<String, Object> params) {
+        String res = HttpRequest
+                .post(URL + "/v1/generation/stable-diffusion-v1-5/image-to-image")
+                .header(Header.AUTHORIZATION, "Bearer " + STABILITY_API_KEY)
+                .header(Header.CONTENT_TYPE, "multipart/form-data")
+                .header(Header.ACCEPT, "application/json")
+                // 传form-data
+                .form(params)
                 .execute()
                 .body();
         return res;
