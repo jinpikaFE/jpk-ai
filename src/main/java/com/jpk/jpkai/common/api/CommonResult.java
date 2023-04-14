@@ -1,5 +1,8 @@
 package com.jpk.jpkai.common.api;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 /**
  * 通用返回对象
  * Created by macro on 2019/4/19.
@@ -23,79 +26,102 @@ public class CommonResult<T> {
      *
      * @param data 获取的数据
      */
-    public static <T> CommonResult<T> success(T data) {
-        return new CommonResult<T>(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), data);
+    public static <T> ResponseEntity<CommonResult<T>> success(T data) {
+        CommonResult<T> result = new CommonResult<>(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), data);
+        return ResponseEntity.ok(result);
     }
 
     /**
      * 成功返回结果
      *
-     * @param data 获取的数据
-     * @param  message 提示信息
-     */
-    public static <T> CommonResult<T> success(T data, String message) {
-        return new CommonResult<T>(ResultCode.SUCCESS.getCode(), message, data);
-    }
-
-    /**
-     * 失败返回结果
-     * @param errorCode 错误码
-     */
-    public static <T> CommonResult<T> failed(IErrorCode errorCode) {
-        return new CommonResult<T>(errorCode.getCode(), errorCode.getMessage(), null);
-    }
-
-    /**
-     * 失败返回结果
-     * @param errorCode 错误码
-     * @param message 错误信息
-     */
-    public static <T> CommonResult<T> failed(IErrorCode errorCode,String message) {
-        return new CommonResult<T>(errorCode.getCode(), message, null);
-    }
-
-    /**
-     * 失败返回结果
+     * @param data    获取的数据
      * @param message 提示信息
      */
-    public static <T> CommonResult<T> failed(String message) {
-        return new CommonResult<T>(ResultCode.FAILED.getCode(), message, null);
+    public static <T> ResponseEntity<CommonResult<T>> success(T data, String message) {
+        CommonResult<T> result = new CommonResult<>(ResultCode.SUCCESS.getCode(), message, data);
+        return ResponseEntity.ok(result);
+    }
+
+    /**
+     * 失败返回结果
+     *
+     * @param errorCode 错误码
+     */
+    public static <T> ResponseEntity<CommonResult<T>> failed(IErrorCode errorCode) {
+        CommonResult<T> result = new CommonResult<>(errorCode.getCode(), errorCode.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+    }
+
+    /**
+     * 失败返回结果
+     *
+     * @param errorCode 错误码
+     * @param message   错误信息
+     */
+    public static <T> ResponseEntity<CommonResult<T>> failed(IErrorCode errorCode, String message) {
+        CommonResult<T> result = new CommonResult<>(errorCode.getCode(), message, null);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+    }
+
+    /**
+     * 失败返回结果
+     *
+     * @param message 提示信息
+     */
+    public static <T> ResponseEntity<CommonResult<T>> failed(String message) {
+        CommonResult<T> result = new CommonResult<>(ResultCode.FAILED.getCode(), message, null);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
     }
 
     /**
      * 失败返回结果
      */
-    public static <T> CommonResult<T> failed() {
+    public static <T> ResponseEntity<CommonResult<T>> failed() {
         return failed(ResultCode.FAILED);
+    }
+
+    /**
+     * 失败返回结果
+     *
+     * @param errorCode 错误码
+     * @param message   错误信息
+     */
+    public static <T> ResponseEntity<CommonResult<T>> codeFailed(IErrorCode errorCode, String message) {
+        CommonResult<T> result = new CommonResult<>(errorCode.getCode(), message, null);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     /**
      * 参数验证失败返回结果
      */
-    public static <T> CommonResult<T> validateFailed() {
+    public static <T> ResponseEntity<CommonResult<T>> validateFailed() {
         return failed(ResultCode.VALIDATE_FAILED);
     }
 
     /**
      * 参数验证失败返回结果
+     *
      * @param message 提示信息
      */
-    public static <T> CommonResult<T> validateFailed(String message) {
-        return new CommonResult<T>(ResultCode.VALIDATE_FAILED.getCode(), message, null);
+    public static <T> ResponseEntity<CommonResult<T>> validateFailed(String message) {
+        CommonResult<T> result = new CommonResult<>(ResultCode.VALIDATE_FAILED.getCode(), message, null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
     /**
      * 未登录返回结果
      */
-    public static <T> CommonResult<T> unauthorized(T data) {
-        return new CommonResult<T>(ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMessage(), data);
+    public static <T> ResponseEntity<CommonResult<T>> unauthorized(T data) {
+        CommonResult<T> result = new CommonResult<>(ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMessage(), data);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
     }
 
     /**
      * 未授权返回结果
      */
-    public static <T> CommonResult<T> forbidden(T data) {
-        return new CommonResult<T>(ResultCode.FORBIDDEN.getCode(), ResultCode.FORBIDDEN.getMessage(), data);
+    public static <T> ResponseEntity<CommonResult<T>> forbidden(T data) {
+        CommonResult<T> result = new CommonResult<>(ResultCode.FORBIDDEN.getCode(), ResultCode.FORBIDDEN.getMessage(), data);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
     }
 
     public long getCode() {

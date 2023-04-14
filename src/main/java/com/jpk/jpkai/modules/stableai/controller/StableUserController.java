@@ -3,6 +3,8 @@ package com.jpk.jpkai.modules.stableai.controller;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.jpk.jpkai.common.api.CommonResult;
+import com.jpk.jpkai.common.api.ResultCode;
+import com.jpk.jpkai.common.exception.Asserts;
 import com.jpk.jpkai.modules.stableai.service.StableUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,8 +21,9 @@ public class StableUserController {
     private StableUserService stableUserService;
 
     @GetMapping("/account")
-    public CommonResult<JSONObject> getUser() {
-        String res =stableUserService.getUser();
+    public ResponseEntity<CommonResult<JSONObject>> getUser() {
+        String res = stableUserService.getUser();
+//        Asserts.codeFail(ResultCode.FAILED, "系统错误");
         JSONObject jsonObject = JSONUtil.parseObj(res);
         return CommonResult.success(jsonObject);
     }
